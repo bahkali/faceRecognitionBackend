@@ -1,42 +1,65 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
+const bcrypt = require("bcrypt");
+const cors = require("cors");
 
 const db = {
   users: [
     {
       id: "123",
       name: "John",
-      email: "john@gmail.com",
       password: "cookies",
+      email: "john@gmail.com",
       entries: 0,
       joined: new Date(),
     },
     {
       id: "124",
       name: "Sally",
-      email: "sally@gmail.com",
       password: "bananas",
+      email: "sally@gmail.com",
       entries: 0,
       joined: new Date(),
+    },
+  ],
+  login: [
+    {
+      id: "987",
+      hash: "",
+      email: "john@gmail.com",
     },
   ],
 };
 const PORT = 3000;
 const app = express();
-// const getUser = (id) {
 
-// }
 app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-///
 app.get("/", (req, res) => {
   res.json(db.users);
 });
 
+const storeUserPassword = (password, salt) =>
+  bcrypt.hash(password, salt).then(storeHashInDatabase);
+// Returns true if user password is correct, returns false otherwise
+const checkUserPassword = (enteredPassword, storedPasswordHash) =>
+  bcrypt.compare(enteredPassword, storedPasswordHash);
+
+const storeHashInDatabase = (hash) => {
+  // Store the hash in your password DB
+  return hash;
+};
+
 app.post("/signin", (req, res) => {
   const { email, password } = req.body;
+  //code on crypting the password
+  // bcrypt.compare(password, "hash", function (err, result) {
+  // result == true
+  // });
+
   console.log(email, password);
   if (email === db.users[0].email && password === db.users[0].password) {
     res.json("success");
@@ -47,6 +70,12 @@ app.post("/signin", (req, res) => {
 
 app.post("/register", (req, res) => {
   const { email, name, password } = req.body;
+
+  storeUserPassword(password, 10)
+    .then((hash) => checkUserPassword(password, hash))
+    .then(console.log)
+    .catch(console.error);
+
   db.users.push({
     id: "125",
     name: name,
