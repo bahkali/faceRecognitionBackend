@@ -5,8 +5,8 @@
 Using Machine learning to detect faces in a image this app use React as FrontEnd and NodeJs for BackEnd
 the prediction is made via api from [Clariai](www.clarifai.com) which return the probabitity scores on the likelihood that the media contains human faces.
 
-![image](images/Face-Recognition-App.png)
-![image](images/Face-Recognition-App.png)
+![Login Page](images/Face-Recognition-App.png)
+![Prediction Page](images/Face-Recognition-App-2.png)
 
 ## Installation
 
